@@ -1,6 +1,8 @@
 package model;
 
-public abstract class Canbo {
+import java.io.Serializable;
+
+public abstract class Canbo implements Serializable, Comparable<Canbo> {
 	
 	private String name;
 	private double salaryRatio;
@@ -20,6 +22,17 @@ public abstract class Canbo {
 	public void setSalaryRatio(double salaryRatio) {
 		this.salaryRatio = salaryRatio;
 	}
+	
+	@Override
+	public int compareTo(Canbo o) {
+		// TODO Auto-generated method stub
+		if(this.getName().compareTo(o.getName()) == 0) {
+		    return (int) (this.getSalary() - o.getSalary());
+		}
+		return this.getName().compareTo(o.getName());
+		
+	}
+	
 	
 	
 }

@@ -1,6 +1,11 @@
 package bussines;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 import model.Canbo;
@@ -15,6 +20,7 @@ public class EmployeeMagement {
 	
 	public EmployeeMagement() {
 		 dsCanbo = new ArrayList<Canbo>();
+		 readFileEmloyee();
 	}
 	
 	public ArrayList<Canbo> getDsCanbo() {
@@ -56,8 +62,10 @@ public class EmployeeMagement {
 			 int numberDay = scanner.nextInt();
 			 emp.setDayOfWork(numberDay);
 			 dsCanbo.add(emp);
+			 //
+			 savaFileEmployee(dsCanbo);
 			 
-		 }else if(choice.equals("t")) {
+		 }else {
 			 
 			 Giangvien emp = new Giangvien();
 			 System.out.println("Name: ");
@@ -83,7 +91,10 @@ public class EmployeeMagement {
 			 int hour = scanner.nextInt();
 			 emp.setTeachInHour(hour);
 			 
-			 dsCanbo.add(emp);		 
+			 dsCanbo.add(emp);	
+			 //
+			 savaFileEmployee(dsCanbo);
+			 
 		 }
 		 
 		 
@@ -93,8 +104,9 @@ public class EmployeeMagement {
 	
 	public void display(ArrayList<Canbo> s) {
 		
-		
+		Collections.sort(s);
 		System.out.println("Name, Fac/Dept, Deg/Pos, Sal Ratio, Allowance, T.Hours/W.Days, Salary ");
+//		sortOrderByName(s);
 		for (int i = 0; i < s.size(); i++) {
 			 System.out.println(s.get(i));
 		}
@@ -102,9 +114,10 @@ public class EmployeeMagement {
 	
 	public ArrayList<Canbo> searchbyName(String name) {
 		
+		
 		ArrayList<Canbo> sName = new ArrayList<Canbo>();
 		for (int i = 0; i <dsCanbo.size(); i++) {
-			if(dsCanbo.get(i).getName().contains(name)) {
+			if(dsCanbo.get(i).getName().toUpperCase().contains(name.toUpperCase())) {
 			    sName.add(dsCanbo.get(i));
 			    
 			}
@@ -118,7 +131,7 @@ public class EmployeeMagement {
 		for (int i = 0; i <dsCanbo.size(); i++) {
 			if(dsCanbo.get(i) instanceof Nhanvien) {
 			    Nhanvien temp = (Nhanvien) dsCanbo.get(i);
-			    if(temp.getDepartment().contains(depfac)) {
+			    if(temp.getDepartment().toUpperCase().contains(depfac.toUpperCase())) {
 			    	sDept.add(dsCanbo.get(i));
 			    }
 			}
@@ -132,4 +145,51 @@ public class EmployeeMagement {
 		return sDept;
 	}
 	
+	public void savaFileEmployee(ArrayList<Canbo> s) {
+		
+		 try {
+	         
+	         FileOutputStream out = new FileOutputStream("D:\\nhanvien2.txt");
+	         ObjectOutputStream oout = new ObjectOutputStream(out);
+	         
+	         oout.writeObject(s);
+	         oout.close();
+	         
+	      } catch (Exception ex) {
+	         ex.printStackTrace();
+	      }
+	}
+	
+	public void readFileEmloyee() {
+		 
+		try {
+			 ObjectInputStream ois = new ObjectInputStream(new FileInputStream("D:\\nhanvien2.txt"));
+	       
+			 dsCanbo = (ArrayList<Canbo>) ois.readObject();
+			 
+		 }
+		 catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public void sortOrderByName(ArrayList<Canbo> s) {
+		
+		Canbo temp;
+		
+		for (int i = 0; i < dsCanbo.size(); i++) {
+			 for(int j = i + 1; j < dsCanbo.size(); j++) {
+				 
+		          if(dsCanbo.get(i).getName().compareTo(dsCanbo.get(j).getName()) > 0) {
+		        	   
+		        	  temp = dsCanbo.get(i);
+		        	  dsCanbo.set(i, dsCanbo.get(j));
+		        	  dsCanbo.set(j, temp);     	  
+		          }
+		          
+			 }
+		}
+		
+		
+	}
 }

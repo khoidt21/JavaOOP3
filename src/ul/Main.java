@@ -1,5 +1,6 @@
 package ul;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import bussines.*;
 public class Main {
@@ -8,7 +9,7 @@ public class Main {
 			
 			Scanner sc = new Scanner(System.in);
 			EmployeeMagement emp = new EmployeeMagement();
-			int choice;
+			int choice = 0;
 			String s;
 			
 			do {
@@ -20,12 +21,19 @@ public class Main {
 				System.out.printf("\t5.Exit\n");
 				System.out.printf("Select function (1,2,3,4 or 5): ");
 				
-				choice = sc.nextInt();
-				sc.nextLine();
-				
+				try {
+					sc = new Scanner(System.in);
+					choice = sc.nextInt();
+					sc.nextLine();
+					
+				}catch (InputMismatchException ex) {
+					
+					System.out.println("Nhap sai dinh dang. ");
+				}
 				switch (choice) {
 				case 1: 
 						emp.addEmployee();
+						
 					break;
 				case 2:
 					    System.out.println("Enter name to search: \n");
@@ -40,6 +48,7 @@ public class Main {
 					  
 					break;
 				case 4:
+					
 						emp.display(emp.getDsCanbo());
 						
 				default:
@@ -47,6 +56,13 @@ public class Main {
 				}
 			}
 			while(choice !=5);
+		
+			String a = "abc";
+			String b = "abc";
+			String c = new String("abc");
+			System.out.println(a==b);//true
+			System.out.println(a==c);//false
 			
 		}
+	
 }
